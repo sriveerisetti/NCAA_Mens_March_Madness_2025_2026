@@ -22,7 +22,7 @@ The blended prediction represents the estimated probability that the **favored (
 | East | (2) UConn | (15) Furman | 0.843 | **UConn** | |
 | South | (1) Florida | (16) Prairie View A&M | 0.908 | **Florida** | |
 | South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** | |
-| South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** | |
+| South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** |❌|
 | South | (4) Nebraska | (13) Troy | 0.716 | **Nebraska** |✅|
 | South | (6) North Carolina | (11) VCU | 0.526 | **VCU** | |
 | South | (3) Illinois | (14) Penn | 0.822 | **Illinois** | |
