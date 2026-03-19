@@ -79,7 +79,7 @@ The prediction system works in three stages:
 
 ## Data Sources
 
-All data comes from the [March Machine Learning Mania](https://www.kaggle.com/competitions/march-machine-learning-mania-2025) competition on Kaggle.
+All data comes from the [March Machine Learning Mania](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data) competition on Kaggle.
 
 | File | Description |
 |------|-------------|
