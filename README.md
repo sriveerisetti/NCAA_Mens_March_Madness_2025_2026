@@ -2,6 +2,51 @@
 
 This project predicts the outcomes of 2026 NCAA Men's Basketball Tournament games by blending two machine learning models: an **In-Season Model** trained on 2025-2026 regular season game data, and a **Historical Seed Model** trained on tournament results from 2012-2025. The ensemble combines current team form with long-term tournament patterns to generate a full 63-game bracket.
 
+**National Champion Pick: Michigan (1-seed)**
+
+---
+
+## Round 1 Predictions
+
+The blended prediction represents the estimated probability that the **favored (lower-seeded) team wins**. When the blended probability falls below our upset threshold of 0.575, we pick the underdog.
+
+| Region | Favorite | Underdog | Blended Pred | Final Pick | Correct? |
+|--------|----------|----------|:------------:|------------|:--------:|
+| East | (1) Duke | (16) Siena | 0.914 | **Duke** | |
+| East | (8) Ohio State | (9) TCU | 0.495 | **TCU** | |
+| East | (5) St John's | (12) Northern Iowa | 0.673 | **St John's** | |
+| East | (4) Kansas | (13) CA Baptist | 0.605 | **Kansas** | |
+| East | (6) Louisville | (11) South Florida | 0.511 | **South Florida** | |
+| East | (3) Michigan St | (14) N Dakota St | 0.699 | **Michigan St** | |
+| East | (7) UCLA | (10) UCF | 0.592 | **UCLA** | |
+| East | (2) UConn | (15) Furman | 0.843 | **UConn** | |
+| South | (1) Florida | (16) Prairie View A&M | 0.915 | **Florida** | |
+| South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** | |
+| South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** | |
+| South | (4) Nebraska | (13) Troy | 0.716 | **Nebraska** | |
+| South | (6) North Carolina | (11) VCU | 0.526 | **VCU** | |
+| South | (3) Illinois | (14) Penn | 0.822 | **Illinois** | |
+| South | (7) Saint Mary's | (10) Texas A&M | 0.618 | **Saint Mary's** | |
+| South | (2) Houston | (15) Idaho | 0.880 | **Houston** | |
+| West | (1) Arizona | (16) Long Island | 0.915 | **Arizona** | |
+| West | (8) Villanova | (9) Utah St | 0.542 | **Utah St** | |
+| West | (5) Wisconsin | (12) High Point | 0.423 | **High Point** | |
+| West | (4) Arkansas | (13) Hawaii | 0.573 | **Hawaii** | |
+| West | (6) BYU | (11) Texas | 0.654 | **BYU** | |
+| West | (3) Gonzaga | (14) Kennesaw St | 0.852 | **Gonzaga** | |
+| West | (7) Miami (FL) | (10) Missouri | 0.670 | **Miami (FL)** | |
+| West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** | |
+| Midwest | (1) Michigan | (16) Howard | 0.860 | **Michigan** | |
+| Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** | |
+| Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** | |
+| Midwest | (4) Alabama | (13) Hofstra | 0.590 | **Alabama** | |
+| Midwest | (6) Tennessee | (11) SMU | 0.686 | **Tennessee** | |
+| Midwest | (3) Virginia | (14) Wright St | 0.816 | **Virginia** | |
+| Midwest | (7) Kentucky | (10) Santa Clara | 0.474 | **Santa Clara** | |
+| Midwest | (2) Iowa St | (15) Tennessee St | 0.845 | **Iowa St** | |
+
+**Round 1 upset picks (11):** TCU, South Florida, Iowa, McNeese, VCU, Utah St, High Point, Hawaii, Saint Louis, Akron, Santa Clara
+
 ---
 
 ## Table of Contents
@@ -13,7 +58,7 @@ This project predicts the outcomes of 2026 NCAA Men's Basketball Tournament game
 5. [Upset Threshold Calibration](#upset-threshold-calibration)
 6. [Model Performance](#model-performance)
 7. [Inference Pipeline](#inference-pipeline)
-8. [Tournament Predictions](#tournament-predictions)
+8. [Full Tournament Bracket](#tournament-predictions)
 9. [Year-Over-Year Improvements](#year-over-year-improvements)
 10. [Future Directions](#future-directions)
 
@@ -153,6 +198,16 @@ The cumulative view confirms that below 0.575, favorites win only 49.1% of the t
 - **ROC AUC**: 0.7034
 - **At 0.58 threshold**: 67.0% overall accuracy, balanced precision/recall
 
+#### ROC Curve — In-Season Model
+![ROC Curve - In-Season Model](Plots/ROC_InSeason.png)
+
+The ROC curve shows the model's ability to discriminate between favorite wins and underdog wins across all possible thresholds. The AUC of 0.70 indicates meaningful predictive power, and the curve is well above the random baseline.
+
+#### Confusion Matrix — In-Season Model
+![Confusion Matrix - In-Season Model](Plots/CM_InSeason.png)
+
+At the 0.58 threshold, the model achieves balanced precision and recall — it correctly identifies 70% of favorite wins and 61% of underdog wins without being biased toward either side.
+
 ### Historical Seed Model
 
 | Confidence Level | Games | Accuracy |
@@ -163,6 +218,21 @@ The cumulative view confirms that below 0.575, favorites win only 49.1% of the t
 
 - **ROC AUC**: 0.64
 - The seed model's calibration showed favorites win 60%+ even at low confidence, so it never recommends picking the underdog on its own. Its value is as a stabilizer in the ensemble.
+
+#### ROC Curve — Historical Seed Model
+![ROC Curve - Historical Model](Plots/ROC_Historical.png)
+
+#### Confusion Matrix — Historical Seed Model
+![Confusion Matrix - Historical Model](Plots/CM_Historical.png)
+
+### Model Comparison
+
+| Model | ROC AUC | Accuracy (0.50) | Accuracy (0.70) | Accuracy (0.80) |
+|-------|---------|-----------------|-----------------|-----------------|
+| In-Season | 0.7034 | 70.3% | 84.0% | 88.2% |
+| Historical Seed | 0.64 | 71.1% | 82.4% | 76.0% |
+
+The in-season model outperforms at higher confidence levels, which is where the most consequential bracket decisions are made. The historical model provides a structural anchor that prevents the in-season model from overreacting to recent form.
 
 ---
 
@@ -182,7 +252,7 @@ The inference notebook loads both trained models and the processed data, then si
 
 ---
 
-## Tournament Predictions
+## Full Tournament Bracket
 
 Confidence labels: **LOCK** (80%+), **STRONG** (70%+), **LEAN** (57.5%+), **UPSET** (model picks the underdog).
 
