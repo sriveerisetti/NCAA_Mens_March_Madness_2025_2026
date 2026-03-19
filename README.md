@@ -434,4 +434,4 @@ The biggest improvements came from adding quadrant features (capturing quality o
 
 ## Data Source
 
-The data used for this project was obtained from the [March Machine Learning Mania 2025](https://www.kaggle.com/competitions/march-machine-learning-mania-2025) competition on Kaggle.
+The data used for this project was obtained from Kaggle
