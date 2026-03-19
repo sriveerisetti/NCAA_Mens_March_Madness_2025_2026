@@ -20,7 +20,7 @@ The blended prediction represents the estimated probability that the **favored (
 | East | (3) Michigan St | (14) N Dakota St | 0.699 | **Michigan St** | |
 | East | (7) UCLA | (10) UCF | 0.592 | **UCLA** | |
 | East | (2) UConn | (15) Furman | 0.843 | **UConn** | |
-| South | (1) Florida | (16) Prairie View A&M | 0.915 | **Florida** | |
+| South | (1) Florida | (16) Prairie View A&M | 0.908 | **Florida** | |
 | South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** | |
 | South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** | |
 | South | (4) Nebraska | (13) Troy | 0.716 | **Nebraska** | |
@@ -40,13 +40,12 @@ The blended prediction represents the estimated probability that the **favored (
 | Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** | |
 | Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** | |
 | Midwest | (4) Alabama | (13) Hofstra | 0.590 | **Alabama** | |
-| Midwest | (6) Tennessee | (11) SMU | 0.686 | **Tennessee** | |
+| Midwest | (6) Tennessee | (11) Miami (OH) | 0.620 | **Tennessee** | |
 | Midwest | (3) Virginia | (14) Wright St | 0.816 | **Virginia** | |
 | Midwest | (7) Kentucky | (10) Santa Clara | 0.474 | **Santa Clara** | |
 | Midwest | (2) Iowa St | (15) Tennessee St | 0.845 | **Iowa St** | |
 
 **Round 1 upset picks (11):** TCU, South Florida, Iowa, McNeese, VCU, Utah St, High Point, Hawaii, Saint Louis, Akron, Santa Clara
-
 ---
 
 ## Table of Contents
