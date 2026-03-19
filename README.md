@@ -130,23 +130,52 @@ Each game is converted into a single matchup row where the team with the better 
 
 ## Key Features
 
-The in-season model uses 31 features selected by statistical significance (positive permutation importance with p < 0.05). The top 10 most impactful features are:
+## Key Features
 
-| Feature | What It Measures | Why It Matters |
-|---------|-----------------|----------------|
-| `Diff_Roll_PointDiff` | Gap in season-long point differential between favorite and underdog | The single best predictor in basketball — captures overall team quality in one number |
-| `A_Q1Q2_Losses` | Number of times the favorite lost to Q1/Q2 opponents | A favorite with 2 quality losses is trustworthy; one with 10 has been exposed |
-| `A_Roll_OppScore` | Average points the favorite allows per game | Defense wins in March — teams that can guard survive cold shooting stretches |
-| `Diff_Roll_Stl` | Steals differential between favorite and underdog | Teams that create turnovers through pressure defense disrupt opponents in tournament settings |
-| `Diff_Roll_OR` | Offensive rebounding gap | Extra possessions from offensive boards can swing close tournament games |
-| `A_Roll_PointDiff` | Favorite's season-long point differential | How dominant is the favorite overall, independent of the matchup? |
-| `B_L10_FGPct` | Underdog's field goal percentage over the last 10 games | A hot-shooting underdog is dangerous — this identifies teams peaking at the right time |
-| `A_L10_Stl` | Favorite's steals per game in the last 10 | Is the favorite's pressure defense active recently? |
-| `Diff_L10_OppScore` | Gap in points allowed over the last 10 games | Momentum defensive gap — who is defending better heading into March? |
-| `Diff_Roll_OppFGPct` | Gap in opponent field goal percentage allowed | Who forces worse shooting from opponents over the full season? |
+### How We Define Favorite and Underdog
 
-The remaining 21 features cover rebounding depth (`A_Roll_OR`, `A_L10_OR`, `A_L10_TotalReb`, `Diff_L10_OR`), shot blocking (`A_L10_Blk`, `A_Roll_Blk`, `B_L10_Blk`, `B_Roll_Blk`), ball security (`Diff_L10_TO`), shooting volume (`A_Roll_FGM`, `A_L10_FGA3`, `B_L10_FGA3`, `B_L10_FGA`, `B_L10_FGM`), free throw pressure (`B_L10_FTPct`), quality of schedule (`A_Q1_Wins`, `A_Q2_Losses`, `Diff_Q3Q4_Losses`), defensive identity (`A_Roll_Stl`, `A_Roll_OppFGPct`), and underdog strength (`B_Roll_PointDiff`).
+In our training data, we need to decide which team is the "favorite" and which is the "underdog" for every regular season game — not just tournament games. Since regular season games don't have tournament seeds, we use each team's **rolling win percentage** going into the game. The team with the better record at that point in the season is labeled the favorite (TeamA), and the team with the worse record is the underdog (TeamB). For example, if Kansas is 18-3 and TCU is 14-7 when they play, Kansas is the favorite for that game. If two teams have identical records, we use an arbitrary tiebreaker (lower TeamID) to keep things consistent.
 
+At tournament time, we switch to **seed number** to determine the favorite — the lower seed (e.g., a 1-seed) is always the favorite over the higher seed (e.g., a 16-seed). This aligns with how the selection committee ranks teams.
+
+All features are then computed from the favorite's perspective (`A_` prefix), the underdog's perspective (`B_` prefix), or as the gap between them (`Diff_` prefix). This lets the model learn patterns like "when the favorite's defense is elite and the underdog can't shoot, the favorite almost always wins."
+
+### Top 10 Features
+
+The in-season model uses 31 features selected by statistical significance (positive permutation importance with p < 0.05). Here are the 10 most impactful:
+
+| Feature | Plain English | Why It Matters in March |
+|---------|--------------|------------------------|
+| `Diff_Roll_PointDiff` | The gap in average margin of victory between the favorite and underdog across the full season. If the favorite wins games by an average of +12 and the underdog wins by +3, this value is +9. | This is the single best predictor in college basketball. Point differential captures everything — offense, defense, and how a team performs in close games — in one number. A large gap here means one team is simply better than the other on both ends of the floor. |
+| `A_Q1Q2_Losses` | How many times the favorite has lost to a Q1 or Q2 opponent (teams with a 55%+ win rate) during the season. | Tournament games are all against good teams. A favorite that went 15-2 against quality opponents has proven they can win when it matters. A favorite that went 8-10 against good teams has been repeatedly exposed and is a prime upset candidate, regardless of their overall record. This is one of the features that helps the model identify "paper tigers" — teams with great records built against weak schedules. |
+| `A_Roll_OppScore` | The average number of points the favorite allows per game across the full season. | Defense wins championships — every coach says it, and the data backs it up. Tournament games are played at a slower pace with more preparation time, which means offenses often struggle. Teams that hold opponents to 60 points per game thrive in this environment because they don't need their shots to fall to stay in the game. A team that allows 75+ per game is vulnerable to any opponent that gets hot. |
+| `Diff_Roll_Stl` | The difference in steals per game between the favorite and underdog over the full season. | Steals represent defensive pressure — deflections, traps, and forcing opponents into uncomfortable situations. In the tournament, when the pressure is already high from the atmosphere and stakes, teams that generate steals compound that pressure. A team that averages 8 steals per game playing a team that averages 4 creates a chaotic, turnover-heavy game that typically favors the more aggressive team. |
+| `Diff_Roll_OR` | The gap in offensive rebounds per game between the two teams across the full season. | When shots aren't falling (and in March, there will always be cold stretches), offensive rebounds give you second and third chances to score. A team that grabs 12 offensive boards per game playing a team that grabs 7 will get roughly 5 extra possessions per game. Over a 40-minute tournament game, that's the difference between surviving a shooting slump and going home. |
+| `A_Roll_PointDiff` | The favorite's own average point differential across the full season, independent of the matchup. | While `Diff_Roll_PointDiff` captures the gap between two teams, this feature captures the favorite's absolute quality level. A favorite with a +15 point differential is a dominant team regardless of who they're playing. A favorite with a +3 point differential has been winning close games all season and may not have much margin for error in the tournament. |
+| `B_L10_FGPct` | The underdog's field goal shooting percentage over their last 10 games. | This is the "Cinderella detector." An underdog that's shooting 48% from the field over their last 10 games is playing their best basketball at the perfect time. Think of a mid-major team that caught fire during their conference tournament — they're dangerous because their confidence is sky-high and their shots are falling. The model uses this to identify underdogs that aren't just lucky, they're genuinely playing well. |
+| `A_L10_Stl` | The favorite's steals per game over the last 10 games. | This captures whether the favorite's defensive intensity is trending up or down heading into March. A team that averaged 7 steals per game all season but only 4 over their last 10 may have become passive or fatigued. Conversely, a team that's ramped up to 9 steals recently is peaking defensively at the right time. |
+| `Diff_L10_OppScore` | The gap in points allowed between the two teams over their last 10 games. | This is the momentum version of the defensive comparison. Two teams might have similar season-long defensive numbers, but if one has been holding opponents to 58 points per game recently while the other has been giving up 72, the recent trend matters more heading into a single-elimination tournament. |
+| `Diff_Roll_OppFGPct` | The gap in opponent field goal percentage allowed between the two teams across the full season. | This goes deeper than just points allowed. A team might allow 65 points per game because they play slow (fewer possessions), while another allows 65 because they force bad shots. Opponent field goal percentage isolates the defensive skill — who actually makes opponents miss? The team that forces a lower shooting percentage is the better defensive team, regardless of pace. |
+
+### Additional Features
+
+The remaining 21 features round out the model's view of each matchup:
+
+**Rebounding depth** — `A_Roll_OR`, `A_L10_OR`, `A_L10_TotalReb`, and `Diff_L10_OR` give the model multiple views of rebounding strength, both for the full season and recent momentum. Teams that control the glass control the game.
+
+**Shot blocking** — `A_L10_Blk`, `A_Roll_Blk`, `B_L10_Blk`, and `B_Roll_Blk` measure rim protection for both teams. A team with active shot blockers changes how opponents attack the paint, forcing difficult mid-range jumpers instead of easy layups.
+
+**Ball security** — `Diff_L10_TO` captures the recent turnover differential. In tournament games, turnovers are amplified because each possession matters more. The team that takes care of the ball in the last 10 games is better prepared for tournament pressure.
+
+**Shooting volume and efficiency** — `A_Roll_FGM`, `A_L10_FGA3`, `B_L10_FGA3`, `B_L10_FGA`, and `B_L10_FGM` tell the model how teams score and how much they rely on three-point shooting. An underdog that lives and dies by the three (`B_L10_FGA3`) can either shoot their way to a massive upset or go cold and lose by 20 — the model learns which pattern is more likely.
+
+**Free throw pressure** — `B_L10_FTPct` measures whether the underdog can hit free throws under pressure. In the final minutes of a close tournament game, the underdog will be at the line with the game on the line. A team shooting 65% from the stripe will likely choke the lead away. A team shooting 78% will close it out.
+
+**Quality of schedule** — `A_Q1_Wins`, `A_Q2_Losses`, and `Diff_Q3Q4_Losses` round out the quadrant picture. How many elite wins does the favorite have? How many times did the favorite lose to merely good teams? And critically, how many bad losses (to Q3/Q4 opponents) separate the two teams? A team with zero bad losses is disciplined and consistent. A team with 3-4 bad losses is a ticking time bomb in March.
+
+**Defensive identity** — `A_Roll_Stl` and `A_Roll_OppFGPct` give the model a full-season view of the favorite's defensive style to complement the momentum features above.
+
+**Underdog strength** — `B_Roll_PointDiff` is the underdog's overall point differential for the season. This helps the model distinguish between a 12-seed that's genuinely good (positive point differential, competitive in their conference) and a 12-seed that barely survived their conference tournament (negative or near-zero point differential).
 ---
 
 ## Model Architecture
