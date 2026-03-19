@@ -8,7 +8,7 @@ This project predicts the outcomes of 2026 NCAA Men's Basketball Tournament game
 
 ## Round 1 Predictions
 
-The blended prediction represents the estimated probability that the **favored (lower-seeded) team wins**. When the blended probability falls below our upset threshold of 0.575, we pick the underdog.
+The blended prediction represents the estimated probability that the **favored (lower-seeded) team wins**. A higher probability means the model is more confident the favorite wins. When the blended probability falls below our upset threshold of 0.58, the model believes the favorite is vulnerable and we pick the underdog instead.
 
 | Region | Favorite | Underdog | Blended Pred | Final Pick | Correct? |
 |--------|----------|----------|:------------:|------------|:--------:|
@@ -46,6 +46,7 @@ The blended prediction represents the estimated probability that the **favored (
 | Midwest | (2) Iowa St | (15) Tennessee St | 0.845 | **Iowa St** | |
 
 **Round 1 upset picks (11):** TCU, South Florida, Iowa, McNeese, VCU, Utah St, High Point, Hawaii, Saint Louis, Akron, Santa Clara
+
 ---
 
 ## Table of Contents
@@ -53,13 +54,14 @@ The blended prediction represents the estimated probability that the **favored (
 1. [Approach](#approach)
 2. [Data Sources](#data-sources)
 3. [Feature Engineering](#feature-engineering)
-4. [Model Architecture](#model-architecture)
-5. [Upset Threshold Calibration](#upset-threshold-calibration)
-6. [Model Performance](#model-performance)
-7. [Inference Pipeline](#inference-pipeline)
-8. [Full Tournament Bracket](#tournament-predictions)
-9. [Year-Over-Year Improvements](#year-over-year-improvements)
-10. [Future Directions](#future-directions)
+4. [Key Features](#key-features)
+5. [Model Architecture](#model-architecture)
+6. [Upset Threshold Calibration](#upset-threshold-calibration)
+7. [Model Performance](#model-performance)
+8. [Inference Pipeline](#inference-pipeline)
+9. [Full Tournament Bracket](#full-tournament-bracket)
+10. [Year-Over-Year Improvements](#year-over-year-improvements)
+11. [Future Directions](#future-directions)
 
 ---
 
@@ -71,7 +73,7 @@ The prediction system works in three stages:
 
 2. **Historical Seed Model** — Looks at how specific seed matchups have played out historically in the NCAA tournament. A 5-vs-12 game has a known upset rate. A 1-vs-16 almost never goes to the underdog. This model provides a structural prior based on decades of tournament data.
 
-3. **Ensemble Blending** — The two models are combined with a 63/37 weighting (in-season / historical) and an upset threshold derived from calibration analysis. When the blended probability falls below the threshold, the model picks the underdog.
+3. **Ensemble Blending** — The two models are combined with a 63/37 weighting (in-season / historical) and an upset threshold of 0.58 derived from calibration analysis. When the blended probability says the favorite has less than a 58% chance of winning, we pick the underdog.
 
 ---
 
@@ -126,6 +128,27 @@ Each game is converted into a single matchup row where the team with the better 
 
 ---
 
+## Key Features
+
+The in-season model uses 31 features selected by statistical significance (positive permutation importance with p < 0.05). The top 10 most impactful features are:
+
+| Feature | What It Measures | Why It Matters |
+|---------|-----------------|----------------|
+| `Diff_Roll_PointDiff` | Gap in season-long point differential between favorite and underdog | The single best predictor in basketball — captures overall team quality in one number |
+| `A_Q1Q2_Losses` | Number of times the favorite lost to Q1/Q2 opponents | A favorite with 2 quality losses is trustworthy; one with 10 has been exposed |
+| `A_Roll_OppScore` | Average points the favorite allows per game | Defense wins in March — teams that can guard survive cold shooting stretches |
+| `Diff_Roll_Stl` | Steals differential between favorite and underdog | Teams that create turnovers through pressure defense disrupt opponents in tournament settings |
+| `Diff_Roll_OR` | Offensive rebounding gap | Extra possessions from offensive boards can swing close tournament games |
+| `A_Roll_PointDiff` | Favorite's season-long point differential | How dominant is the favorite overall, independent of the matchup? |
+| `B_L10_FGPct` | Underdog's field goal percentage over the last 10 games | A hot-shooting underdog is dangerous — this identifies teams peaking at the right time |
+| `A_L10_Stl` | Favorite's steals per game in the last 10 | Is the favorite's pressure defense active recently? |
+| `Diff_L10_OppScore` | Gap in points allowed over the last 10 games | Momentum defensive gap — who is defending better heading into March? |
+| `Diff_Roll_OppFGPct` | Gap in opponent field goal percentage allowed | Who forces worse shooting from opponents over the full season? |
+
+The remaining 21 features cover rebounding depth (`A_Roll_OR`, `A_L10_OR`, `A_L10_TotalReb`, `Diff_L10_OR`), shot blocking (`A_L10_Blk`, `A_Roll_Blk`, `B_L10_Blk`, `B_Roll_Blk`), ball security (`Diff_L10_TO`), shooting volume (`A_Roll_FGM`, `A_L10_FGA3`, `B_L10_FGA3`, `B_L10_FGA`, `B_L10_FGM`), free throw pressure (`B_L10_FTPct`), quality of schedule (`A_Q1_Wins`, `A_Q2_Losses`, `Diff_Q3Q4_Losses`), defensive identity (`A_Roll_Stl`, `A_Roll_OppFGPct`), and underdog strength (`B_Roll_PointDiff`).
+
+---
+
 ## Model Architecture
 
 ### In-Season Model
@@ -138,15 +161,6 @@ Trained using [AutoGluon](https://auto.gluon.ai/) with the following configurati
 - **Training split**: 75% train / 15% validation / 10% test, split temporally by DayNum
 - **Training data**: 2026 regular season only (single-season, NIL-era focus)
 
-The final model uses 31 features selected by statistical significance (positive importance with p < 0.05). The features span six categories:
-
-- **Overall quality**: `Diff_Roll_PointDiff`, `A_Roll_PointDiff`, `B_Roll_PointDiff`
-- **Defense**: `A_Roll_OppScore`, `Diff_Roll_OppFGPct`, `A_Roll_OppFGPct`, `A_L10_Blk`, `A_Roll_Blk`, `B_L10_Blk`, `B_Roll_Blk`
-- **Steals and pressure**: `Diff_Roll_Stl`, `A_Roll_Stl`, `A_L10_Stl`
-- **Rebounding**: `Diff_Roll_OR`, `A_Roll_OR`, `A_L10_OR`, `Diff_L10_OR`, `A_L10_TotalReb`
-- **Momentum**: `Diff_L10_OppScore`, `Diff_L10_TO`, `B_L10_FGPct`, `B_L10_FGA3`, `B_L10_FGA`, `B_L10_FTPct`, `B_L10_FGM`, `A_L10_FGA3`, `A_Roll_FGM`
-- **Quality of schedule**: `A_Q1Q2_Losses`, `A_Q1_Wins`, `A_Q2_Losses`, `Diff_Q3Q4_Losses`
-
 ### Historical Seed Model
 
 - **Algorithm**: AutoGluon weighted ensemble (same configuration)
@@ -156,30 +170,30 @@ The final model uses 31 features selected by statistical significance (positive 
 
 Historical win rates are computed leak-free — for each tournament game, only prior seasons are used to calculate how often that seed matchup goes to the favorite.
 
-### Ensemble Weights
+### Ensemble Configuration
 
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | In-Season Weight | 0.63 | Higher AUC (0.70) and captures current form |
 | Seed Weight | 0.37 | Provides structural prior, stabilizes predictions toward favorites |
-| Upset Threshold | 0.575 | Derived from calibration — below this, favorites win < 50% |
+| Upset Threshold | 0.58 | Derived from calibration — at this point the favorite's edge disappears |
 
 ---
 
 ## Upset Threshold Calibration
 
-Rather than using a fixed 0.50 threshold, we analyzed the model's calibration on the test set to find the mathematically optimal point for picking upsets.
+Rather than using a fixed 0.50 threshold, we analyzed the model's calibration on the test set to find the mathematically optimal point for picking upsets. The higher the blended probability, the more confident we are that the favorite wins. The question is: at what probability does the favorite's advantage disappear?
 
-The key analysis groups games by the model's predicted probability and checks how often the favorite actually wins:
+We grouped test set games by the model's predicted probability and checked how often the favorite actually won:
 
-| Probability Band | Games | Favorite Win Rate | Recommendation |
+| Probability Band | Games | Favorite Win Rate | Interpretation |
 |-----------------|-------|-------------------|----------------|
-| 0.500 - 0.525 | 46 | 63.0% | Pick favorite |
-| 0.525 - 0.550 | 35 | 57.1% | Pick favorite |
-| 0.550 - 0.575 | 30 | 53.3% | Lean favorite |
-| 0.575 - 0.600 | 22 | 50.0% | Coin flip |
+| 0.500 - 0.525 | 46 | 63.0% | Favorite has a clear edge |
+| 0.525 - 0.550 | 35 | 57.1% | Favorite still favored |
+| 0.550 - 0.575 | 30 | 53.3% | Barely an edge for the favorite |
+| 0.575 - 0.600 | 22 | 50.0% | Coin flip — favorite's advantage is gone |
 
-The cumulative view confirms that below 0.575, favorites win only 49.1% of the time across 214 games. This is the mathematically derived crossover point where picking the underdog becomes the higher-EV decision.
+Below 0.58, the favorite's win rate drops to roughly 50/50 or worse. This is our upset threshold: when the model gives the favorite less than a 58% chance, the data says the underdog has just as good a shot, so we pick the upset.
 
 ---
 
@@ -245,7 +259,7 @@ The inference notebook loads both trained models and the processed data, then si
 
 3. **Matchup Prediction** — For each game, we compute seed model features from historical tournament data and in-season features from the team stats lookup. Both models produce a probability, which are blended using the 63/37 weighting.
 
-4. **Upset Decision** — If the blended probability is >= 0.575, pick the favorite. Otherwise, pick the underdog.
+4. **Upset Decision** — If the blended probability is >= 0.58, pick the favorite. If it's below 0.58, the model says the favorite is vulnerable and we pick the underdog.
 
 5. **Tournament Simulation** — Winners advance through Round of 64, Round of 32, Sweet 16, Elite 8, Final Four, and Championship. Each new matchup re-determines the favorite (lower seed) and runs the full prediction pipeline.
 
@@ -253,7 +267,7 @@ The inference notebook loads both trained models and the processed data, then si
 
 ## Full Tournament Bracket
 
-Confidence labels: **LOCK** (80%+), **STRONG** (70%+), **LEAN** (57.5%+), **UPSET** (model picks the underdog).
+Confidence labels: **LOCK** (80%+), **STRONG** (70%+), **LEAN** (58%+), **UPSET** (model picks the underdog).
 
 The "Fav Prob" column shows the blended probability that the higher-seeded (favored) team wins.
 
@@ -276,7 +290,7 @@ The "Fav Prob" column shows the blended probability that the higher-seeded (favo
 
 | Matchup | Fav Prob | Pick | Confidence |
 |---------|----------|------|------------|
-| (1) Florida vs (16) Prairie View A&M | 91.5% | Florida | LOCK |
+| (1) Florida vs (16) Prairie View A&M | 90.8% | Florida | LOCK |
 | (8) Clemson vs (9) Iowa | 57.0% | **Iowa** | UPSET |
 | (5) Vanderbilt vs (12) McNeese | 52.0% | **McNeese** | UPSET |
 | (4) Nebraska vs (13) Troy | 71.6% | Nebraska | STRONG |
@@ -306,7 +320,7 @@ The "Fav Prob" column shows the blended probability that the higher-seeded (favo
 | (8) Georgia vs (9) Saint Louis | 54.0% | **Saint Louis** | UPSET |
 | (5) Texas Tech vs (12) Akron | 50.6% | **Akron** | UPSET |
 | (4) Alabama vs (13) Hofstra | 59.0% | Alabama | LEAN |
-| (6) Tennessee vs (11) SMU | 68.6% | Tennessee | LEAN |
+| (6) Tennessee vs (11) Miami (OH) | 62.0% | Tennessee | LEAN |
 | (3) Virginia vs (14) Wright St | 81.6% | Virginia | LOCK |
 | (7) Kentucky vs (10) Santa Clara | 47.4% | **Santa Clara** | UPSET |
 | (2) Iowa St vs (15) Tennessee St | 84.5% | Iowa St | LOCK |
@@ -394,7 +408,7 @@ This is the second iteration of the project. The following improvements were mad
 | **Quadrant Features** | Not included | Leak-free Q1/Q2 wins, Q3/Q4 losses |
 | **Strength of Schedule** | Not included | Rolling SOS from opponent win percentages |
 | **Data Leakage** | Not audited | Verified leak-free (`shift(1)` throughout) |
-| **Upset Threshold** | Fixed at 0.50 with manual 0.45-0.50 override | Mathematically derived at 0.575 from calibration data |
+| **Upset Threshold** | Fixed at 0.50 with manual 0.45-0.50 override | Mathematically derived at 0.58 from calibration data |
 | **Historical Model** | Win percentage + deep run experience + wins since 1985 | Seed matchup win rates + seed-level statistics |
 | **Training Data (In-Season)** | 2024-2025 season | 2026 season only (NIL era focus) |
 | **Ensemble Weights** | Ad hoc blending | Calibrated 63/37 split based on model AUC |
