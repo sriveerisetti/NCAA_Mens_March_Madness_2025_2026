@@ -130,8 +130,6 @@ Each game is converted into a single matchup row where the team with the better 
 
 ## Key Features
 
-## Key Features
-
 ### How We Define Favorite and Underdog
 
 In our training data, we need to decide which team is the "favorite" and which is the "underdog" for every regular season game — not just tournament games. Since regular season games don't have tournament seeds, we use each team's **rolling win percentage** going into the game. The team with the better record at that point in the season is labeled the favorite (TeamA), and the team with the worse record is the underdog (TeamB). For example, if Kansas is 18-3 and TCU is 14-7 when they play, Kansas is the favorite for that game. If two teams have identical records, we use an arbitrary tiebreaker (lower TeamID) to keep things consistent.
