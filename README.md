@@ -37,7 +37,7 @@ The blended prediction represents the estimated probability that the **favored (
 | West | (7) Miami (FL) | (10) Missouri | 0.670 | **Miami (FL)** | |
 | West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** | |
 | Midwest | (1) Michigan | (16) Howard | 0.860 | **Michigan** | |
-| Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** | |
+| Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** |✅|
 | Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** | |
 | Midwest | (4) Alabama | (13) Hofstra | 0.590 | **Alabama** | |
 | Midwest | (6) Tennessee | (11) Miami (OH) | 0.620 | **Tennessee** | |
