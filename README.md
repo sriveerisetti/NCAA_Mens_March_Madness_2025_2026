@@ -10,6 +10,14 @@ This project predicts the outcomes of 2026 NCAA Men's Basketball Tournament game
 
 The blended prediction represents the estimated probability that the **favored (lower-seeded) team wins**. A higher probability means the model is more confident the favorite wins. When the blended probability falls below our upset threshold of 0.58, the model believes the favorite is vulnerable and we pick the underdog instead.
 
+| Metric | Count |
+|--------|-------|
+| ✅ Correct | 18 |
+| ❌ Incorrect | 7 |
+| ⬜ TBD | 7 |
+| **Accuracy (of decided games)** | **18/25 (72.0%)** |
+
+
 | Region | Favorite | Underdog | Blended Pred | Final Pick | Correct? |
 |--------|----------|----------|:------------:|------------|:--------:|
 | East | (1) Duke | (16) Siena | 0.914 | **Duke** |✅|
