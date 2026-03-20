@@ -28,8 +28,8 @@ The blended prediction represents the estimated probability that the **favored (
 | South | (3) Illinois | (14) Penn | 0.822 | **Illinois** |✅|
 | South | (7) Saint Mary's | (10) Texas A&M | 0.618 | **Saint Mary's** |❌|
 | South | (2) Houston | (15) Idaho | 0.880 | **Houston** |✅|
-| West | (1) Arizona | (16) Long Island | 0.915 | **Arizona** | |
-| West | (8) Villanova | (9) Utah St | 0.542 | **Utah St** | |
+| West | (1) Arizona | (16) Long Island | 0.915 | **Arizona** |✅|
+| West | (8) Villanova | (9) Utah St | 0.542 | **Utah St** |✅|
 | West | (5) Wisconsin | (12) High Point | 0.423 | **High Point** |✅|
 | West | (4) Arkansas | (13) Hawaii | 0.573 | **Hawaii** |❌|
 | West | (6) BYU | (11) Texas | 0.654 | **BYU** |❌|
@@ -38,12 +38,12 @@ The blended prediction represents the estimated probability that the **favored (
 | West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** | |
 | Midwest | (1) Michigan | (16) Howard | 0.860 | **Michigan** |✅|
 | Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** |✅|
-| Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** | |
-| Midwest | (4) Alabama | (13) Hofstra | 0.590 | **Alabama** | |
-| Midwest | (6) Tennessee | (11) Miami (OH) | 0.620 | **Tennessee** | |
-| Midwest | (3) Virginia | (14) Wright St | 0.816 | **Virginia** | |
-| Midwest | (7) Kentucky | (10) Santa Clara | 0.474 | **Santa Clara** | |
-| Midwest | (2) Iowa St | (15) Tennessee St | 0.845 | **Iowa St** | |
+| Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** |❌ |
+| Midwest | (4) Alabama | (13) Hofstra | 0.590 | **Alabama** |✅|
+| Midwest | (6) Tennessee | (11) Miami (OH) | 0.620 | **Tennessee** |✅|
+| Midwest | (3) Virginia | (14) Wright St | 0.816 | **Virginia** |✅|
+| Midwest | (7) Kentucky | (10) Santa Clara | 0.474 | **Santa Clara** |❌|
+| Midwest | (2) Iowa St | (15) Tennessee St | 0.845 | **Iowa St** |✅|
 
 **Round 1 upset picks (11):** TCU, South Florida, Iowa, McNeese, VCU, Utah St, High Point, Hawaii, Saint Louis, Akron, Santa Clara
 
