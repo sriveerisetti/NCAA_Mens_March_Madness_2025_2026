@@ -13,7 +13,7 @@ The blended prediction represents the estimated probability that the **favored (
 | Region | Favorite | Underdog | Blended Pred | Final Pick | Correct? |
 |--------|----------|----------|:------------:|------------|:--------:|
 | East | (1) Duke | (16) Siena | 0.914 | **Duke** |✅|
-| East | (8) Ohio State | (9) TCU | 0.495 | **TCU** |✅ |
+| East | (8) Ohio State | (9) TCU | 0.495 | **TCU** |✅|
 | East | (5) St John's | (12) Northern Iowa | 0.673 | **St John's** | |
 | East | (4) Kansas | (13) CA Baptist | 0.605 | **Kansas** | |
 | East | (6) Louisville | (11) South Florida | 0.511 | **South Florida** |❌|
@@ -24,16 +24,16 @@ The blended prediction represents the estimated probability that the **favored (
 | South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** | |
 | South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** |❌|
 | South | (4) Nebraska | (13) Troy | 0.716 | **Nebraska** |✅|
-| South | (6) North Carolina | (11) VCU | 0.526 | **VCU** | |
-| South | (3) Illinois | (14) Penn | 0.822 | **Illinois** | |
-| South | (7) Saint Mary's | (10) Texas A&M | 0.618 | **Saint Mary's** | |
-| South | (2) Houston | (15) Idaho | 0.880 | **Houston** | |
+| South | (6) North Carolina | (11) VCU | 0.526 | **VCU** |✅|
+| South | (3) Illinois | (14) Penn | 0.822 | **Illinois** |✅|
+| South | (7) Saint Mary's | (10) Texas A&M | 0.618 | **Saint Mary's** |❌|
+| South | (2) Houston | (15) Idaho | 0.880 | **Houston** |✅|
 | West | (1) Arizona | (16) Long Island | 0.915 | **Arizona** | |
 | West | (8) Villanova | (9) Utah St | 0.542 | **Utah St** | |
 | West | (5) Wisconsin | (12) High Point | 0.423 | **High Point** |✅|
 | West | (4) Arkansas | (13) Hawaii | 0.573 | **Hawaii** |❌|
-| West | (6) BYU | (11) Texas | 0.654 | **BYU** | |
-| West | (3) Gonzaga | (14) Kennesaw St | 0.852 | **Gonzaga** | |
+| West | (6) BYU | (11) Texas | 0.654 | **BYU** |❌|
+| West | (3) Gonzaga | (14) Kennesaw St | 0.852 | **Gonzaga** |✅|
 | West | (7) Miami (FL) | (10) Missouri | 0.670 | **Miami (FL)** | |
 | West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** | |
 | Midwest | (1) Michigan | (16) Howard | 0.860 | **Michigan** | |
