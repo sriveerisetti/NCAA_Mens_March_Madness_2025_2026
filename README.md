@@ -12,24 +12,24 @@ The blended prediction represents the estimated probability that the **favored (
 
 | Metric | Count |
 |--------|-------|
-| ✅ Correct | 18 |
+| ✅ Correct | 29 |
 | ❌ Incorrect | 7 |
-| ⬜ TBD | 7 |
-| **Accuracy (of decided games)** | **18/25 (72.0%)** |
+
+| **Accuracy (of decided games)** | **29/36 (80.5%)** |
 
 
 | Region | Favorite | Underdog | Blended Pred | Final Pick | Correct? |
 |--------|----------|----------|:------------:|------------|:--------:|
 | East | (1) Duke | (16) Siena | 0.914 | **Duke** |✅|
 | East | (8) Ohio State | (9) TCU | 0.495 | **TCU** |✅|
-| East | (5) St John's | (12) Northern Iowa | 0.673 | **St John's** | |
-| East | (4) Kansas | (13) CA Baptist | 0.605 | **Kansas** | |
+| East | (5) St John's | (12) Northern Iowa | 0.673 | **St John's** |✅|
+| East | (4) Kansas | (13) CA Baptist | 0.605 | **Kansas** |✅|
 | East | (6) Louisville | (11) South Florida | 0.511 | **South Florida** |❌|
 | East | (3) Michigan St | (14) N Dakota St | 0.699 | **Michigan St** |✅|
-| East | (7) UCLA | (10) UCF | 0.592 | **UCLA** | |
-| East | (2) UConn | (15) Furman | 0.843 | **UConn** | |
-| South | (1) Florida | (16) Prairie View A&M | 0.908 | **Florida** | |
-| South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** | |
+| East | (7) UCLA | (10) UCF | 0.592 | **UCLA** |✅|
+| East | (2) UConn | (15) Furman | 0.843 | **UConn** |✅|
+| South | (1) Florida | (16) Prairie View A&M | 0.908 | **Florida** |✅|
+| South | (8) Clemson | (9) Iowa | 0.570 | **Iowa** |✅|
 | South | (5) Vanderbilt | (12) McNeese | 0.520 | **McNeese** |❌|
 | South | (4) Nebraska | (13) Troy | 0.716 | **Nebraska** |✅|
 | South | (6) North Carolina | (11) VCU | 0.526 | **VCU** |✅|
@@ -42,8 +42,8 @@ The blended prediction represents the estimated probability that the **favored (
 | West | (4) Arkansas | (13) Hawaii | 0.573 | **Hawaii** |❌|
 | West | (6) BYU | (11) Texas | 0.654 | **BYU** |❌|
 | West | (3) Gonzaga | (14) Kennesaw St | 0.852 | **Gonzaga** |✅|
-| West | (7) Miami (FL) | (10) Missouri | 0.670 | **Miami (FL)** | |
-| West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** | |
+| West | (7) Miami (FL) | (10) Missouri | 0.670 | **Miami (FL)** |✅|
+| West | (2) Purdue | (15) Queens (NC) | 0.829 | **Purdue** |✅|
 | Midwest | (1) Michigan | (16) Howard | 0.860 | **Michigan** |✅|
 | Midwest | (8) Georgia | (9) Saint Louis | 0.540 | **Saint Louis** |✅|
 | Midwest | (5) Texas Tech | (12) Akron | 0.506 | **Akron** |❌ |
